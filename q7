@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main(void) {
+    int a = 22;
+    int b = 33;
+    int sum = a + b;
+
+    printf("%d\n", sum);
+
+    return 0;
+}
