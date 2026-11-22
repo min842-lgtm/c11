@@ -1,0 +1,40 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Score {
+    int korean;
+    int english;
+    int math;
+};
+
+int main(void) {
+    const struct Score scores[] = {
+        {80, 90, 85},
+        {70, 75, 95}
+    };
+    const size_t count = sizeof scores / sizeof scores[0];
+
+    FILE *file = fopen("my.bin", "wb");
+    if (file == NULL) {
+        fputs("my.bin: could not open file.\n", stderr);
+        return EXIT_FAILURE;
+    }
+
+    int status = EXIT_SUCCESS;
+
+    if (fwrite(scores, sizeof scores[0], count, file) != count) {
+        fputs("my.bin: could not write all records.\n", stderr);
+        status = EXIT_FAILURE;
+    }
+
+    if (fclose(file) == EOF) {
+        fputs("my.bin: could not close file successfully.\n", stderr);
+        status = EXIT_FAILURE;
+    }
+
+    return status;
+}
