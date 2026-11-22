@@ -1,0 +1,46 @@
+#include <errno.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+static int parse_int(const char *text, int *result)
+{
+    char *end;
+
+    errno = 0;
+    long value = strtol(text, &end, 10);
+
+    if (end == text || *end != '\0' || errno == ERANGE ||
+        value < INT_MIN || value > INT_MAX) {
+        return 0;
+    }
+
+    *result = (int)value;
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+    int a, b;
+
+    // argv[0]은 프로그램 이름이므로, 정수 두 개를 받으면 argc는 3입니다.
+    if (argc != 3) {
+        fprintf(stderr, "사용법: %s 정수1 정수2\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+    if (!parse_int(argv[1], &a) || !parse_int(argv[2], &b)) {
+        fprintf(stderr, "오류: int 범위의 정수 두 개를 입력하세요.\n");
+        return EXIT_FAILURE;
+    }
+
+    // 실제로 더하기 전에 합이 int 범위를 벗어나는지 확인합니다.
+    if ((b > 0 && a > INT_MAX - b) ||
+        (b < 0 && a < INT_MIN - b)) {
+        fprintf(stderr, "오류: 두 정수의 합이 int 범위를 벗어납니다.\n");
+        return EXIT_FAILURE;
+    }
+
+    printf("%d\n", a + b);
+    return EXIT_SUCCESS;
+}
