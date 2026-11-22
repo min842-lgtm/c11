@@ -1,0 +1,62 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Score {
+    int korean;
+    int english;
+    int math;
+};
+
+int main(void) {
+    struct Score scores[2];
+    const size_t count = sizeof scores / sizeof scores[0];
+
+    FILE *file = fopen("my.bin", "rb");
+    if (file == NULL) {
+        fputs("my.bin 파일을 열 수 없습니다.\n", stderr);
+        return EXIT_FAILURE;
+    }
+
+    if (fread(scores, sizeof scores[0], count, file) != count) {
+        if (ferror(file)) {
+            fputs("my.bin 파일을 읽는 중 오류가 발생했습니다.\n", stderr);
+        } else {
+            fputs("my.bin에 필요한 성적 데이터가 부족합니다.\n", stderr);
+        }
+        fclose(file);
+        return EXIT_FAILURE;
+    }
+
+    if (fclose(file) == EOF) {
+        fputs("my.bin 파일을 닫는 중 오류가 발생했습니다.\n", stderr);
+        return EXIT_FAILURE;
+    }
+
+    double korean_total = 0.0;
+    double english_total = 0.0;
+    double math_total = 0.0;
+
+    for (size_t i = 0; i < count; i++) {
+        double average = ((double)scores[i].korean
+                          + scores[i].english + scores[i].math) / 3.0;
+
+        if (i > 0) {
+            printf(", ");
+        }
+        printf("개인%zu: %.2f", i + 1, average);
+
+        korean_total += scores[i].korean;
+        english_total += scores[i].english;
+        math_total += scores[i].math;
+    }
+    putchar('\n');
+
+    printf("과목1: %.2f, 과목2: %.2f, 과목3: %.2f\n",
+           korean_total / count, english_total / count, math_total / count);
+
+    return EXIT_SUCCESS;
+}
