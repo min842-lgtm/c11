@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char str[100];
+
+    printf("문장 입력: ");
+
+    if (fgets(str, sizeof str, stdin) == NULL) {
+        return 0;
+    }
+
+    // 입력 끝의 줄바꿈을 제거합니다.
+    str[strcspn(str, "\n")] = '\0';
+
+    // 마지막 문자부터 첫 문자까지 출력합니다.
+    for (size_t i = strlen(str); i > 0; --i) {
+        putchar(str[i - 1]);
+    }
+    putchar('\n');
+
+    return 0;
+}
