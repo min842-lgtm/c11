@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int main(void) {
+    enum { ROWS = 3, COLS = 4 };
+
+    int a[ROWS][COLS] = {
+        { 1,  2,  3,  4},
+        { 5,  6,  7,  8},
+        { 9, 10, 11, 12}
+    };
+    int sum = 0;
+
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            sum += a[i][j];
+        }
+    }
+
+    printf("%d\n", sum);
+    return 0;
+}
