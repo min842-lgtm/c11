@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    const size_t count = 3;
+    int *numbers = malloc(count * sizeof *numbers);
+
+    if (numbers == NULL) {
+        fprintf(stderr, "메모리 할당에 실패했습니다.\n");
+        return EXIT_FAILURE;
+    }
+
+    numbers[0] = 11;
+    numbers[1] = 33;
+    numbers[2] = 55;
+
+    int sum = 0;
+    for (size_t i = 0; i < count; i++) {
+        sum += numbers[i];
+    }
+
+    printf("합계: %d\n", sum);
+    free(numbers);
+
+    return EXIT_SUCCESS;
+}
